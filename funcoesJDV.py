@@ -1,4 +1,5 @@
 
+
 from time import sleep
 import os.path
 
@@ -17,7 +18,7 @@ matriz = [
 def reset():
     global matriz
     global vencedor
-    global perdedor 
+    global perdedor
     vencedor = ' '
     perdedor = ' '
     matriz = [
@@ -42,6 +43,7 @@ def novojogador():
         f.write('0\n')
         f.close()
         sleep(1)
+        print()
 
 
 # função para excluir um jogador
@@ -54,6 +56,7 @@ def excluirjogador():
     else:
         print('Jogador {} não existe no banco de dados.'.format(nome))
         sleep(1)
+    print()
 
 
 # função para consultar pontuação
@@ -71,12 +74,13 @@ def verificapontuacao():
     else:
         print('Jogador {} não existe.'.format(nome))
         sleep(1)
+    print()
 
 
 # função para atualizar o tabuleiro
 def atualizatabuleiro():
     tabuleiro = '''
-     Colunas:       0 | 1 | 2 | 3 | 4 
+     Colunas:       0 | 1 | 2 | 3 | 4
       Linhas: 0 |   {} | {} | {} | {} | {}
               --+  ---+---+---+---+---
               1 |   {} | {} | {} | {} | {}
@@ -120,9 +124,9 @@ def verificavencedor():
                     vencedor = i
                     print('O jogador {} é o vencedor'.format(vencedor))
                     return vencedor
-                coluna += 1   
+                coluna += 1
             linha += 1
-            
+
 
     # verifica se houve vitória por coluna
     for i in jogador:
@@ -264,13 +268,13 @@ def verificavencedor():
             if matriz[ind_diag_linha][ind_diag_coluna] == i:
                 soma += 1
             elif matriz[ind_diag_linha][ind_diag_coluna] == jogador_oposto:
-                soma = 0    
+                soma = 0
             if soma == 4:
                 vencedor = i
                 print('O jogador {} é o vencedor'.format(vencedor))
                 return vencedor
             ind_diag_linha += 1
-            ind_diag_coluna += 1        
+            ind_diag_coluna += 1
 
 
     # verifica se houve vitória por diagonal6
@@ -305,86 +309,89 @@ def jogar():
     global vencedor
     global perdedor
     contador = 0
-    Jogador_1 = input('Jogador 1 (X): ')
-    Jogador_2 = input('Jogador 2 (O): ')
-    print()
-
+    Jogador_1 = input('Quem será o Jogador 1 (X): ')
     # verifica se os jogadores estão no banco de dados
-    if os.path.isfile('{}.txt'.format(Jogador_1)) and os.path.isfile('{}.txt'.format(Jogador_2)) :
-
+    if os.path.isfile('{}.txt'.format(Jogador_1)):
+        Jogador_2 = input('Quem será o Jogador 2 (O): ')
+        if os.path.isfile('{}.txt'.format(Jogador_2)) :
         # loop do jogo com condição de empate e vencedor
-        while contador < 25 or vencedor == ' ':
-            if contador % 2 == 0:
-                jogador = Jogador_1
-            elif contador % 2 != 0:
-                jogador = Jogador_2
-            linha = int(input('>> {} <<\n\nLinha: '.format(jogador)))
-            coluna = int(input('Coluna: '))
-            print('Vencedor: ', vencedor)
-
-            if (linha >= 0 or coluna >= 0) and (linha < 5 or coluna < 5): 
-                # verifica se a coordenada esta vazia
-                if matriz[linha][coluna] == ' ':
-                    if contador % 2 == 0:
-                        matriz[linha][coluna] = 'X'
-                        atualizatabuleiro()
-                        contador += 1
-                        verificavencedor()
-
-                    elif contador % 2 != 0:
-                        matriz[linha][coluna] = 'O'
-                        atualizatabuleiro()
-                        contador += 1
-                        verificavencedor()
-                else:
-                    print('Coordenada ocupada!')
-                    print('Por favor escolha outra coordenada.')
-
-                # verifica quem é o vencedor
-                if vencedor != ' ':
-                    if vencedor == 'X':
-                        vencedor = Jogador_1
-                        perdedor = Jogador_2
-                    elif vencedor == 'O':
-                        vencedor = Jogador_2
-                        perdedor = Jogador_1
-                    print('Vencedor: ', vencedor)
-
-                    # atualização de registro do vencedor
-                    f = open('{}.txt'.format(vencedor))
-                    historico = f.readlines()
-                    vitorias = int(historico[0])
-                    derrotas = int(historico[1])
-                    vitorias +=1
-                    f.close()
-                    file = open('{}.txt'.format(vencedor), 'w')
-                    file.write('{}\n'.format(str(vitorias)))
-                    file.write('{}\n'.format(str(derrotas)))
-                    file.close()
-
-                    # atualização do registro do perdedor
-                    f = open('{}.txt'.format(perdedor))
-                    historico = f.readlines()
-                    vitorias = int(historico[0])
-                    derrotas = int(historico[1])
-                    derrotas +=1
-                    f.close()
-                    file = open('{}.txt'.format(perdedor), 'w')
-                    file.write('{}\n'.format(str(vitorias)))
-                    file.write('{}\n'.format(str(derrotas)))
-                    file.close() 
-
-
-                    reset()
-                    break
-                # condição de existencia para coordenadas
-            else:
-                print('Coordenada inexistente...\n')
+            while contador < 25 or vencedor == ' ':
+                if contador % 2 == 0:
+                    jogador = Jogador_1
+                elif contador % 2 != 0:
+                    jogador = Jogador_2
                 linha = int(input('>> {} <<\n\nLinha: '.format(jogador)))
                 coluna = int(input('Coluna: '))
-            print()
+                print('Vencedor: ', vencedor)
+
+                if (linha >= 0 or coluna >= 0) and (linha < 5 or coluna < 5): 
+                    # verifica se a coordenada esta vazia
+                    if matriz[linha][coluna] == ' ':
+                        if contador % 2 == 0:
+                            matriz[linha][coluna] = 'X'
+                            atualizatabuleiro()
+                            contador += 1
+                            verificavencedor()
+
+                        elif contador % 2 != 0:
+                            matriz[linha][coluna] = 'O'
+                            atualizatabuleiro()
+                            contador += 1
+                            verificavencedor()
+                    else:
+                        print('Coordenada ocupada!')
+                        print('Por favor escolha outra coordenada.')
+
+                    # verifica quem é o vencedor
+                    if vencedor != ' ':
+                        if vencedor == 'X':
+                            vencedor = Jogador_1
+                            perdedor = Jogador_2
+                        elif vencedor == 'O':
+                            vencedor = Jogador_2
+                            perdedor = Jogador_1
+                        print('Vencedor: ', vencedor)
+
+                        # atualização de registro do vencedor
+                        f = open('{}.txt'.format(vencedor))
+                        historico = f.readlines()
+                        vitorias = int(historico[0])
+                        derrotas = int(historico[1])
+                        vitorias +=1
+                        f.close()
+                        file = open('{}.txt'.format(vencedor), 'w')
+                        file.write('{}\n'.format(str(vitorias)))
+                        file.write('{}\n'.format(str(derrotas)))
+                        file.close()
+
+                        # atualização do registro do perdedor
+                        f = open('{}.txt'.format(perdedor))
+                        historico = f.readlines()
+                        vitorias = int(historico[0])
+                        derrotas = int(historico[1])
+                        derrotas +=1
+                        f.close()
+                        file = open('{}.txt'.format(perdedor), 'w')
+                        file.write('{}\n'.format(str(vitorias)))
+                        file.write('{}\n'.format(str(derrotas)))
+                        file.close()
+
+
+                        reset()
+                        break
+                    # condição de existencia para coordenadas
+                else:
+                    print('Coordenada inexistente...\n')
+                    linha = int(input('>> {} <<\n\nLinha: '.format(jogador)))
+                    coluna = int(input('Coluna: '))
+                print()
+            else:
+                print('Empate!')
         else:
-            print('Empate!')
+            print('Jogador {} não encontrado...\n'.format(Jogador_2))
     else:
-        print('Algum jogador não consta no banco de dados, favor verificar...')
-        
+        print("Jogador {} não encontrado...\n".format(Jogador_1))
+    print()
+
+
+

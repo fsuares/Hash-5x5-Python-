@@ -22,6 +22,6 @@ def main():
         elif opcao == '4':
             jogar()
         elif opcao == '5':
-           break
+            break
 
 main()
